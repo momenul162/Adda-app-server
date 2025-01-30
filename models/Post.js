@@ -6,7 +6,10 @@ const postSchema = new Schema({
     ref: "User",
     required: true,
   },
-  media: {
+  image: {
+    type: String,
+  },
+  video: {
     type: String,
   },
   body: {

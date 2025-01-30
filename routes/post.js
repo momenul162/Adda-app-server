@@ -1,7 +1,23 @@
-const { uploadPost, getPosts } = require("../controller/post");
 const router = require("express").Router();
+const {
+  uploadPost,
+  getPosts,
+  updatePost,
+  getPostById,
+  reactionController,
+} = require("../controller/post");
+const authenticate = require("../middleware/authentication");
+const validateRequest = require("../middleware/validateRequest");
+const { createPostSchema, updatePostSchema, reactionSchema } = require("../schemas/postSchema");
 
-router.post("/", uploadPost);
-router.get("/", getPosts);
+router.get("/", authenticate, getPosts);
+
+router.get("/:postId", authenticate, getPostById);
+
+router.post("/", authenticate, validateRequest(createPostSchema), uploadPost);
+
+router.patch("/:postId", authenticate, validateRequest(updatePostSchema), updatePost);
+
+router.patch("/:postId/react", authenticate, validateRequest(reactionSchema), reactionController);
 
 module.exports = router;

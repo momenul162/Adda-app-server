@@ -4,7 +4,7 @@ const error = require("../utils/error");
 
 /* resister controller */
 const registerController = tryCatch(async (req, res) => {
-  const { username, email, phone, password, photo, country, isActive } = req.body;
+  const { username, email, phone, password, photo, country } = req.body;
 
   if (!username || !email || !phone || !password || !country) {
     throw error("Invalid data", 400);
@@ -17,7 +17,6 @@ const registerController = tryCatch(async (req, res) => {
     password,
     photo,
     country,
-    isActive,
   });
 
   return res.status(200).json({ message: "User created successfully", newUser });

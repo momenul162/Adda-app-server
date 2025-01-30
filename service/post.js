@@ -1,5 +1,4 @@
 const Post = require("../models/Post");
-const User = require("../models/User");
 const error = require("../utils/error");
 const { findByProperty } = require("./user");
 
@@ -12,15 +11,32 @@ const findByPostProperty = (key, value) => {
 };
 
 /* Post server using POST method */
-const postService = async ({ userId, media, body }) => {
+const postService = async ({ userId, image, video, body, visibility }) => {
   const user = await findByProperty("_id", userId);
 
   if (!user) {
     throw error("Unauthorized", 400);
   }
 
-  const newPost = new Post({ userId, media, body });
+  const newPost = new Post({ userId, image, video, body, visibility });
   return newPost.save();
+};
+
+/* Handle user reaction */
+const toggleReaction = async (postId, userId, action) => {
+  const alreadyLiked = post.likes.includes(userId);
+  const alreadyDisliked = post.dislikes && post.dislikes.includes(userId); // Check if dislikes exist
+
+  if (alreadyLiked) {
+    // Remove like
+    post.likes = post.likes.filter((id) => id !== userId);
+  } else {
+    // Add like and remove dislike (if any)
+    post.likes.push(userId);
+    if (alreadyDisliked) {
+      post.dislikes = post.dislikes.filter((id) => id !== userId);
+    }
+  }
 };
 
 /* Get all post */
@@ -32,4 +48,5 @@ module.exports = {
   findByPostProperty,
   postService,
   getAllPost,
+  toggleReaction,
 };

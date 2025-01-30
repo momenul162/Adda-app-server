@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { findByProperty } = require("./user");
 
 /* user register service */
-const registerService = async ({ username, email, phone, password, photo, country, isActive }) => {
+const registerService = async ({ username, email, phone, password, photo, country }) => {
   let user = await findByProperty("email", email);
   if (user) {
     throw error("User already exists", 400);
@@ -13,7 +13,7 @@ const registerService = async ({ username, email, phone, password, photo, countr
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  user = new User({ username, email, phone, password: hash, photo, country, isActive });
+  user = new User({ username, email, phone, password: hash, photo, country });
 
   return user.save();
 };
@@ -24,7 +24,7 @@ const loginService = async ({ email, password }) => {
   if (!user) {
     throw error("Invalid Credential", 400);
   }
-  console.log(user);
+
   const isValid = await bcrypt.compare(password, user.password);
   console.log(isValid);
 
@@ -37,7 +37,6 @@ const loginService = async ({ email, password }) => {
     username: user.username,
     email: user.email,
     phone: user.phone,
-    password: user.password,
     photo: user.photo,
     country: user.country,
     isActive: user.isActive,
