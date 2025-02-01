@@ -4,9 +4,9 @@ const { z } = require("zod");
 const createPostSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   body: z.string().optional(),
-  visibility: z.enum(["PUBLIC", "PRIVATE", "FRIEND"]).optional(),
-  image: z.string().url("Image must be a valid URL").optional(),
-  video: z.string().url("Video must be a valid URL").optional(),
+  visibility: z.enum(["PUBLIC", "PRIVATE", "FRIEND"]),
+  image: z.string().url("Image must be a valid URL").nullable().optional(),
+  video: z.string().url("Video must be a valid URL").nullable().optional(),
 });
 
 /* UPDATE POST FROM USER */

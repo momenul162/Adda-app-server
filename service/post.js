@@ -19,24 +19,15 @@ const postService = async ({ userId, image, video, body, visibility }) => {
   }
 
   const newPost = new Post({ userId, image, video, body, visibility });
-  return newPost.save();
-};
 
-/* Handle user reaction */
-const toggleReaction = async (postId, userId, action) => {
-  const alreadyLiked = post.likes.includes(userId);
-  const alreadyDisliked = post.dislikes && post.dislikes.includes(userId); // Check if dislikes exist
+  await newPost.save();
 
-  if (alreadyLiked) {
-    // Remove like
-    post.likes = post.likes.filter((id) => id !== userId);
-  } else {
-    // Add like and remove dislike (if any)
-    post.likes.push(userId);
-    if (alreadyDisliked) {
-      post.dislikes = post.dislikes.filter((id) => id !== userId);
-    }
-  }
+  const populated = await Post.findById(newPost._id).populate({
+    path: "userId",
+    select: "username photo country",
+  });
+
+  return populated;
 };
 
 /* Get all post */
@@ -48,5 +39,4 @@ module.exports = {
   findByPostProperty,
   postService,
   getAllPost,
-  toggleReaction,
 };

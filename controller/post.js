@@ -62,8 +62,6 @@ const reactionController = tryCatch(async (req, res) => {
     throw error("Invalid reaction type. Must be 'like' or 'dislike'", 400);
   }
 
-  console.log(userId);
-
   const userIdObjectId = new mongoose.Types.ObjectId(userId); // Convert userId to ObjectId
 
   const existLike = post.likes.some((id) => id.equals(userIdObjectId)); // Use .equals() for ObjectIds
@@ -88,8 +86,6 @@ const reactionController = tryCatch(async (req, res) => {
       }
     }
   }
-
-  console.log(post);
 
   await post.save();
   return res.status(200).json(post);
