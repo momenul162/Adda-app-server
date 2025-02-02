@@ -19,6 +19,7 @@ const getCommentByPostId = tryCatch(async (req, res) => {
   const { postId } = req.params;
 
   const comments = await getComments({ postId });
+
   return res.status(200).json(comments);
 });
 

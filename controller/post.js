@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const { postService, getAllPost, findByPostProperty } = require("../service/post");
 const tryCatch = require("../utils/catch-async");
 const error = require("../utils/error");
+const Post = require("../models/Post");
 
 /* upload a post */
 const uploadPost = tryCatch(async (req, res) => {
@@ -16,6 +17,21 @@ const uploadPost = tryCatch(async (req, res) => {
   return res.status(200).json({ message: "Uploaded successfully", post });
 });
 
+/* Delete post using postId */
+const deletePostById = tryCatch(async (req, res) => {
+  const { postId } = req.params;
+
+  const post = await findByPostProperty("_id", postId);
+
+  if (!post) {
+    throw error("Post not found", 404);
+  }
+
+  await post.deleteOne();
+
+  return res.status(203).json({ message: "Post deleted successfully" });
+});
+
 /* Get all post controller*/
 const getPosts = tryCatch(async (_req, res) => {
   const posts = await getAllPost();
@@ -25,7 +41,13 @@ const getPosts = tryCatch(async (_req, res) => {
 const getPostById = tryCatch(async (req, res) => {
   const { postId } = req.params;
   const post = await findByPostProperty("_id", postId);
-  return res.status(200).json(post);
+
+  const populated = await Post.findById(post._id).populate({
+    path: "userId",
+    select: "username photo country",
+  });
+
+  return res.status(200).json(populated);
 });
 
 /* post update controller */
@@ -93,6 +115,7 @@ const reactionController = tryCatch(async (req, res) => {
 
 module.exports = {
   getPosts,
+  deletePostById,
   getPostById,
   uploadPost,
   updatePost,

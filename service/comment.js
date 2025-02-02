@@ -1,13 +1,20 @@
 const Comment = require("../models/Comment");
-const Post = require("../models/Post");
 
-const getComments = ({ id }) => {
-  return Post.find({ postId: id }).populate({ path: "userId", select: "username" });
+const getComments = ({ postId }) => {
+  return Comment.find({ postId }).populate({ path: "userId", select: "username photo" });
 };
 
-const commentService = ({ userId, postId, body }) => {
+const commentService = async ({ userId, postId, body }) => {
   const comment = new Comment({ userId, postId, body });
-  return comment.save();
+
+  await comment.save();
+
+  const populated = Comment.findById(comment._id).populate({
+    path: "userId",
+    select: "username photo",
+  });
+
+  return populated;
 };
 
 module.exports = {
