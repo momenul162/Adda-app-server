@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./db");
 const port = 8080;
 const cors = require("cors");
+require("dotenv").config();
+
 const routes = require("./routes/index");
 
 const app = express();
@@ -20,10 +22,12 @@ app.use((err, _req, res, _next) => {
   return res.status(status).json({ message });
 });
 
-connectDB("mongodb://127.0.0.1:27017/adda")
+connectDB(
+  `mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASS}@cluster0.phpiexj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+)
   .then(() => {
     console.log("Database connected"),
-      app.listen(port, () => {
+      app.listen(port, "0.0.0.0", () => {
         console.log(`Adda app listening on PORT: ${port}`);
       });
   })
