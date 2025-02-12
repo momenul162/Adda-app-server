@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const { registerService, loginService } = require("../service/auth");
 const tryCatch = require("../utils/catch-async");
 const error = require("../utils/error");
@@ -31,8 +32,14 @@ const loginController = tryCatch(async (req, res) => {
   }
 
   const user = await loginService({ email, password });
+  console.log(user);
 
-  return res.status(200).json({ message: "Login successfully", user });
+  const populated = await User.findById(user._id)
+    .populate("friends", "username email photo")
+    .populate("friendRequests", "username email photo")
+    .populate("sentRequests", "username email photo");
+
+  return res.status(200).json({ message: "Login successfully", populated });
 });
 
 module.exports = {

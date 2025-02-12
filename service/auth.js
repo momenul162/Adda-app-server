@@ -40,6 +40,12 @@ const loginService = async ({ email, password }) => {
     photo: user.photo,
     country: user.country,
     isActive: user.isActive,
+    currentCity: user.currentCity,
+    dateOfBirth: user.dateOfBirth,
+    occupation: user.occupation,
+    friends: user.friends,
+    friendRequests: user.friendRequests,
+    sentRequests: user.sentRequests,
   };
 
   const token = jwt.sign(payload, "secret-key", { expiresIn: "7d" });

@@ -28,16 +28,33 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  bio: {
+    type: String,
+    maxlength: 250,
+    default: "",
+  },
   password: {
     type: String,
     minlength: [6, "Password is too short"],
     required: true,
+  },
+  currentCity: {
+    type: String,
+  },
+  dateOfBirth: {
+    type: Date,
+  },
+  occupation: {
+    type: String,
   },
   isActive: {
     type: String,
     enum: ["ACTIVE", "INACTIVE"],
     default: "INACTIVE",
   },
+  friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  friendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  sentRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const User = model("User", userSchema);
