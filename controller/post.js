@@ -67,7 +67,13 @@ const updatePost = tryCatch(async (req, res) => {
   post.video = video ?? post.video;
 
   await post.save();
-  return res.status(200).json(post);
+
+  const populated = await Post.findById(postId).populate({
+    path: "userId",
+    select: "username photo country",
+  });
+
+  return res.status(200).json(populated);
 });
 
 /* Reaction controller */

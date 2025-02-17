@@ -20,6 +20,9 @@ const userSchema = new Schema({
   photo: {
     type: String,
   },
+  coverPhoto: {
+    type: String,
+  },
   phone: {
     type: String,
     required: true,

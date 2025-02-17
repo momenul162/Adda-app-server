@@ -19,4 +19,16 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
-module.exports = { registerSchema, loginSchema };
+const userUpdateSchema = z.object({
+  username: z.string().min(3, "Name must be at least 3 character").optional(),
+  email: z.string().email("Email must be valid").optional(),
+  bio: z.string().max(250, "Bio must be up to 250 characters").optional(),
+  phone: z.string().optional(),
+  currentCity: z.string().optional(),
+  dateOfBirth: z.string().optional(),
+  occupation: z.string().optional(),
+  photo: z.string().url("Photo must be a valid URL").optional(),
+  coverPhoto: z.string().url("Cover photo must be valid url").optional(),
+});
+
+module.exports = { registerSchema, loginSchema, userUpdateSchema };

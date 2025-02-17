@@ -13,8 +13,8 @@ const createPostSchema = z.object({
 const updatePostSchema = z.object({
   body: z.string().optional(),
   visibility: z.enum(["PUBLIC", "PRIVATE", "FRIEND"]).optional(),
-  image: z.string().url().optional(),
-  video: z.string().url().optional(),
+  image: z.string().url().nullable().optional(),
+  video: z.string().url().nullable().optional(),
 });
 
 /* REACTION HANDLER SCHEMA */

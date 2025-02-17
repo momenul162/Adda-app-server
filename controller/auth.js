@@ -32,14 +32,15 @@ const loginController = tryCatch(async (req, res) => {
   }
 
   const user = await loginService({ email, password });
-  console.log(user);
 
-  const populated = await User.findById(user._id)
+  const populated = await User.findById(user.user._id)
     .populate("friends", "username email photo")
     .populate("friendRequests", "username email photo")
     .populate("sentRequests", "username email photo");
 
-  return res.status(200).json({ message: "Login successfully", populated });
+  return res
+    .status(200)
+    .json({ message: "Login successfully", user: populated, token: user.token });
 });
 
 module.exports = {
