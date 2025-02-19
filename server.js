@@ -34,3 +34,5 @@ connectDB(
   .catch((e) => {
     console.error(e);
   });
+
+module.exports = app;
