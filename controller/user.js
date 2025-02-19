@@ -4,6 +4,8 @@ const {
   sendfdRequest,
   acceptFdRequest,
   updateUserService,
+  rejectFdRequest,
+  cancelRequest,
 } = require("../service/user");
 const tryCatch = require("../utils/catch-async");
 const error = require("../utils/error");
@@ -71,8 +73,26 @@ const acceptFriendRequest = tryCatch(async (req, res) => {
   const id = req.user._id;
   const { friendId } = req.params;
 
-  const user = await acceptFdRequest(id, friendId);
-  res.status(200).json(user);
+  const response = await acceptFdRequest(id, friendId);
+  res.status(200).json(response);
+});
+
+/* reject friend request */
+const rejectFriendRequest = tryCatch(async (req, res) => {
+  const id = req.user._id;
+  const { friendId } = req.params;
+
+  const response = await rejectFdRequest(id, friendId);
+  res.status(200).json(response);
+});
+
+/* cancel friend request */
+const cancelFriendRequest = tryCatch(async (req, res) => {
+  const id = req.user._id;
+  const { friendId } = req.params;
+
+  const response = await cancelRequest(id, friendId);
+  res.status(200).json(response);
 });
 
 module.exports = {
@@ -81,5 +101,7 @@ module.exports = {
   getUserById,
   updateUserProfile,
   sendFriendRequest,
+  cancelFriendRequest,
   acceptFriendRequest,
+  rejectFriendRequest,
 };

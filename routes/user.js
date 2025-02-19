@@ -5,6 +5,8 @@ const {
   acceptFriendRequest,
   getUserById,
   updateUserProfile,
+  rejectFriendRequest,
+  cancelFriendRequest,
 } = require("../controller/user");
 
 const authenticate = require("../middleware/authentication");
@@ -25,9 +27,15 @@ router.get("/users/:userId", authenticate, getUserById);
 router.patch("/users/me", authenticate, validateRequest(userUpdateSchema), updateUserProfile);
 
 // Send friend request
-router.post("/friend-request/:friendId", authenticate, sendFriendRequest);
+router.patch("/friend-request/:friendId", authenticate, sendFriendRequest);
 
 // Accept friend request
-router.post("/accept-request/:friendId", authenticate, acceptFriendRequest);
+router.patch("/accept-request/:friendId", authenticate, acceptFriendRequest);
+
+// reject friend request
+router.patch("/reject-request/:friendId", authenticate, rejectFriendRequest);
+
+// cancel friend request
+router.patch("/cancel-request/:friendId", authenticate, cancelFriendRequest);
 
 module.exports = router;
