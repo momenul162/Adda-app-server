@@ -1,27 +1,29 @@
 const express = require("express");
-const connectDB = require("./db");
-const port = process.env.PORT || 3000;
 const cors = require("cors");
 require("dotenv").config();
-
+const port = process.env.PORT || 3000;
+const connectDB = require("./db");
 const routes = require("./routes/index");
 
 const app = express();
 app.use(express.json());
 
-const allowedOrigins = ["http://localhost:5173", "https://adda-with.netlify.app"];
+// const allowedOrigins = ["http://localhost:5173", "https://adda-with.netlify.app"];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT,PATCH, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 
 app.use(routes);
 
